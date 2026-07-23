@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require('express'); 
 const path = require('path'); // handle file paths safely across  diffeent computers with different OS
 
@@ -9,9 +10,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //Middleware
+app.use((req, res, next) => {
+    console.log(`${req.url} ${req.method} ${new Date()}`);
+    next();
+}); // Custom middleware for logging requests
+
 app.use(express.json()); // For reading JSON body
 
-// API Routes
+
+//API Routes
 app.use('/api/tasks', taskRoutes); 
 
 //home route
@@ -20,5 +27,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`APP is listtening on port ${PORT}`);
+    console.log(`APP is listening at http://localhost:${PORT}`);
 });
