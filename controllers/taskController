@@ -1,39 +1,14 @@
-/**
- * Task Controller
- *
- * Handles incoming HTTP requests for task-related operations.
- * Each method maps to a route handler, delegating data logic
- * to the data layer (data/tasks.js) and sending appropriate
- * HTTP responses with status codes.
- *
- * @module controllers/taskController
- */
-
 const taskStore = require('../data/tasks');
 
-/**
- * GET /api/tasks
- * Retrieve all tasks.
- *
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- */
+// GET /api/tasks
 function getAllTasks(req, res) {
-  const tasks = taskStore.getAllTasks();
-  res.json(tasks);
+  res.json(taskStore.getAllTasks());
 }
 
-/**
- * GET /api/tasks/:id
- * Retrieve a single task by its ID.
- *
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- */
+// GET /api/tasks/:id
 function getTaskById(req, res) {
   const id = parseInt(req.params.id, 10);
 
-  // Validate that the ID is a positive integer
   if (isNaN(id) || id < 1) {
     return res.status(400).json({ error: 'Invalid task ID. Must be a positive integer.' });
   }
@@ -46,30 +21,14 @@ function getTaskById(req, res) {
   res.json(task);
 }
 
-/**
- * POST /api/tasks
- * Create a new task.
- * Expects: { title: string, description: string, status?: string }
- *
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- */
+// POST /api/tasks
 function createTask(req, res) {
   const { title, description, status } = req.body;
-
-  // Delegate to the data layer — validation is handled by the middleware
   const task = taskStore.createTask({ title, description, status });
   res.status(201).json(task);
 }
 
-/**
- * PUT /api/tasks/:id
- * Fully update an existing task.
- * Expects: { title: string, description: string, status: string }
- *
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- */
+// PUT /api/tasks/:id
 function updateTask(req, res) {
   const id = parseInt(req.params.id, 10);
 
@@ -78,8 +37,6 @@ function updateTask(req, res) {
   }
 
   const { title, description, status } = req.body;
-
-  // Delegate to the data layer — validation is handled by the middleware
   const updatedTask = taskStore.updateTask(id, { title, description, status });
   if (!updatedTask) {
     return res.status(404).json({ error: `Task with ID ${id} not found.` });
@@ -88,13 +45,7 @@ function updateTask(req, res) {
   res.json(updatedTask);
 }
 
-/**
- * DELETE /api/tasks/:id
- * Delete a task by its ID.
- *
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- */
+// DELETE /api/tasks/:id
 function deleteTask(req, res) {
   const id = parseInt(req.params.id, 10);
 
