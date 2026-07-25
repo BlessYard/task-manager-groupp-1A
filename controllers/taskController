@@ -5,7 +5,7 @@ function getAllTasks(req, res) {
   res.json(taskStore.getAllTasks());
 }
 
-// GET /api/tasks/:id
+// GET /api/tasks/:ID
 function getTaskById(req, res) {
   const id = parseInt(req.params.id, 10);
 
